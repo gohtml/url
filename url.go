@@ -12,21 +12,21 @@ import (
 // fragment is optional. If specified as an empty string, a trailing '#' will be appended.
 func U(scheme, host string, port int, path string, q QUERY, fragment ...string) URL {
 	var b bytesp.ByteSlice
-	if host != "" {
-		if scheme != "" {
+	if len(host) > 0 {
+		if len(scheme) > 0 {
 			b.WriteString(scheme)
 			b.WriteByte(':')
 		}
 
 		b.WriteString(`//`)
-		b.WriteString(host)
+		b.WriteString(EscapeHost(host))
 
 		if port > 0 {
 			b.WriteByte(':')
 			b.WriteItoa(int64(port), 10)
 		}
 
-		if path == "" || path[0] != '/' {
+		if len(path) == 0 || path[0] != '/' {
 			b.WriteByte('/')
 		}
 	}
