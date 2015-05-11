@@ -4,7 +4,7 @@ import (
 	"github.com/golangplus/bytes"
 
 	. "github.com/gohtml/elements"
-	. "github.com/gohtml/utils"
+	"github.com/gohtml/utils"
 )
 
 // Makes a URL.
@@ -19,7 +19,7 @@ func U(scheme, host string, port int, path string, q QUERY, fragment ...string) 
 		}
 
 		b.WriteString(`//`)
-		b.WriteString(EscapeHost(host))
+		b.WriteString(utils.EscapeHost(host))
 
 		if port > 0 {
 			b.WriteByte(':')
@@ -59,9 +59,9 @@ func Q(nameValue ...string) QUERY {
 		if i > 1 {
 			b.WriteByte('&')
 		}
-		b.WriteString(EscapeQuery(nameValue[i-1]))
+		b.WriteString(utils.EscapeQuery(nameValue[i-1]))
 		b.WriteByte('=')
-		b.WriteString(EscapeQuery(nameValue[i]))
+		b.WriteString(utils.EscapeQuery(nameValue[i]))
 	}
 
 	return QUERY(b)
