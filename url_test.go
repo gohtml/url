@@ -16,21 +16,23 @@ func ExampleQ() {
 }
 
 func TestQ(t *testing.T) {
+	assert.Equal(t, "Q", Q(), QUERY(""))
+	assert.Equal(t, "Q", Q("abc"), QUERY(""))
 	assert.Equal(t, "Q", Q("abc", "def"), QUERY("abc=def"))
 	assert.Equal(t, "Q", Q("abc", "d=f"), QUERY("abc=d%3Df"))
 	assert.Equal(t, "Q", Q("abc", "def", "123", "456"), QUERY("abc=def&123=456"))
 }
 
 func ExampleU() {
-	fmt.Println(U("http", "www.example.com", 1234, "/main", Q("q", "\"hello world"), "abc"))
-	fmt.Println(U("http", "www.example.com", 1234, "main", Q("q&b", "hello+world"), "abc"))
-	fmt.Println(U("", "www.example.com", 1234, "main", Q("q&b", "hello+world"), "abc"))
-	fmt.Println(U("", "", 0, "main", Q("q&b", "hello+world"), "abc"))
-	fmt.Println(U("", "", 0, "", Q("q&b", "hello+world"), "abc"))
-	fmt.Println(U("", "", 0, "", "", "abc"))
-	fmt.Println(U("", "www.example.com", 0, "main", Q("q&b", "hello+world"), "abc"))
-	fmt.Println(U("http", "www.example.com", 0, "", Q("?", "?"), ""))
-	fmt.Println(U("http", "www.example.com", 0, "", Q("?", "?")))
+	fmt.Println(FullURL("http", "www.example.com", 1234, "/main", Q("q", "\"hello world"), "abc"))
+	fmt.Println(FullURL("http", "www.example.com", 1234, "main", Q("q&b", "hello+world"), "abc"))
+	fmt.Println(FullURL("", "www.example.com", 1234, "main", Q("q&b", "hello+world"), "abc"))
+	fmt.Println(U("", "main", Q("q&b", "hello+world"), "abc"))
+	fmt.Println(U("", "", Q("q&b", "hello+world"), "abc"))
+	fmt.Println(U("", "", "", "abc"))
+	fmt.Println(U("www.example.com", "main", Q("q&b", "hello+world"), "abc"))
+	fmt.Println(FullURL("http", "www.example.com", 0, "", Q("?", "?"), ""))
+	fmt.Println(FullURL("http", "www.example.com", 0, "", Q("?", "?")))
 
 	// OUTPUT:
 	// http://www.example.com:1234/main?q=%22hello+world#abc
@@ -45,5 +47,5 @@ func ExampleU() {
 }
 
 func TestU(t *testing.T) {
-	assert.Equal(t, "U", U("", "www:abc.com", 0, "", ""), URL("//wwwabc.com/"))
+	assert.Equal(t, "U", U("www:abc.com", "", ""), URL("//wwwabc.com/"))
 }

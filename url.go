@@ -10,8 +10,11 @@ import (
 // Makes a URL.
 // port is ignored if set to zero.
 // fragment is optional. If specified as an empty string, a trailing '#' will be appended.
-func U(scheme, host string, port int, path string, q QUERY, fragment ...string) URL {
-	var b bytesp.ByteSlice
+func U(host string, path string, q QUERY, fragment ...string) URL {
+	return FullURL("", host, 0, path, q, fragment...)
+}
+func FullURL(scheme, host string, port int, path string, q QUERY, fragment ...string) URL {
+	var b bytesp.Slice
 	if len(host) > 0 {
 		if len(scheme) > 0 {
 			b.WriteString(scheme)
@@ -49,11 +52,7 @@ func U(scheme, host string, port int, path string, q QUERY, fragment ...string) 
 // Generates a URL QUERY.
 // nameValue's should be paired otherwise the last one is ignored.
 func Q(nameValue ...string) QUERY {
-	if len(nameValue) < 2 {
-		return ""
-	}
-
-	var b bytesp.ByteSlice
+	var b bytesp.Slice
 
 	for i := 1; i < len(nameValue); i += 2 {
 		if i > 1 {
@@ -63,6 +62,5 @@ func Q(nameValue ...string) QUERY {
 		b.WriteByte('=')
 		b.WriteString(utils.EscapeQuery(nameValue[i]))
 	}
-
 	return QUERY(b)
 }
